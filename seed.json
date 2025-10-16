@@ -1,0 +1,137 @@
+[
+  {
+    "id": "task_1729008000000_123",
+    "title": "Study for Chemistry Midterm",
+    "dueDate": "2025-10-20",
+    "duration": 180,
+    "tag": "Study",
+    "createdAt": "2025-10-15T08:00:00Z",
+    "updatedAt": "2025-10-15T08:00:00Z"
+  },
+  {
+    "id": "task_1729094400000_456",
+    "title": "Complete Programming Assignment",
+    "dueDate": "2025-10-22",
+    "duration": 240,
+    "tag": "Assignment",
+    "createdAt": "2025-10-16T09:30:00Z",
+    "updatedAt": "2025-10-16T09:30:00Z"
+  },
+  {
+    "id": "task_1729180800000_789",
+    "title": "Attend Math Study Group",
+    "dueDate": "2025-10-18",
+    "duration": 120,
+    "tag": "Study",
+    "createdAt": "2025-10-12T14:00:00Z",
+    "updatedAt": "2025-10-12T14:00:00Z"
+  },
+  {
+    "id": "task_1729267200000_012",
+    "title": "Final Exam Preparation",
+    "dueDate": "2025-12-15",
+    "duration": 480,
+    "tag": "Exam",
+    "createdAt": "2025-10-10T10:00:00Z",
+    "updatedAt": "2025-10-14T16:30:00Z"
+  },
+  {
+    "id": "task_1729353600000_345",
+    "title": "Club Meeting at 14:30",
+    "dueDate": "2025-10-19",
+    "duration": 90,
+    "tag": "Club",
+    "createdAt": "2025-10-13T11:00:00Z",
+    "updatedAt": "2025-10-13T11:00:00Z"
+  },
+  {
+    "id": "task_1729440000000_678",
+    "title": "Coffee with Friends",
+    "dueDate": "2025-10-21",
+    "duration": 60,
+    "tag": "Social",
+    "createdAt": "2025-10-16T12:00:00Z",
+    "updatedAt": "2025-10-16T12:00:00Z"
+  },
+  {
+    "id": "task_1729526400000_901",
+    "title": "Gym Workout Session",
+    "dueDate": "2025-10-17",
+    "duration": 75,
+    "tag": "Exercise",
+    "createdAt": "2025-10-14T07:00:00Z",
+    "updatedAt": "2025-10-14T07:00:00Z"
+  },
+  {
+    "id": "task_1729612800000_234",
+    "title": "Review Physics Notes for Quiz",
+    "dueDate": "2025-10-23",
+    "duration": 90,
+    "tag": "Study",
+    "createdAt": "2025-10-15T15:30:00Z",
+    "updatedAt": "2025-10-16T08:15:00Z"
+  },
+  {
+    "id": "task_1729699200000_567",
+    "title": "Submit Research Proposal",
+    "dueDate": "2025-10-25",
+    "duration": 300,
+    "tag": "Assignment",
+    "createdAt": "2025-10-10T13:45:00Z",
+    "updatedAt": "2025-10-12T17:20:00Z"
+  },
+  {
+    "id": "task_1729785600000_890",
+    "title": "Doctor Appointment",
+    "dueDate": "2025-10-24",
+    "duration": 45,
+    "tag": "Personal",
+    "createdAt": "2025-10-11T09:00:00Z",
+    "updatedAt": "2025-10-11T09:00:00Z"
+  },
+  {
+    "id": "task_1729872000000_123",
+    "title": "Volunteer at Campus Event",
+    "dueDate": "2025-10-26",
+    "duration": 180,
+    "tag": "Social",
+    "createdAt": "2025-10-08T10:30:00Z",
+    "updatedAt": "2025-10-08T10:30:00Z"
+  },
+  {
+    "id": "task_1729958400000_456",
+    "title": "Read Chapter 5-7 for Literature Class",
+    "dueDate": "2025-10-27",
+    "duration": 150,
+    "tag": "Study",
+    "createdAt": "2025-10-16T16:00:00Z",
+    "updatedAt": "2025-10-16T16:00:00Z"
+  },
+  {
+    "id": "task_1730044800000_789",
+    "title": "Group Project Meeting at 10:00",
+    "dueDate": "2025-10-28",
+    "duration": 120,
+    "tag": "Meeting",
+    "createdAt": "2025-10-14T18:00:00Z",
+    "updatedAt": "2025-10-15T11:00:00Z"
+  },
+  {
+    "id": "task_1730131200000_012",
+    "title": "A",
+    "dueDate": "2025-11-01",
+    "duration": 1,
+    "tag": "Other",
+    "createdAt": "2025-10-09T20:00:00Z",
+    "updatedAt": "2025-10-09T20:00:00Z"
+  },
+  {
+    "id": "task_1730217600000_345",
+    "title": "Prepare Presentation for Business Class",
+    "dueDate": "2025-11-05",
+    "duration": 1440,
+    "tag": "Assignment",
+    "createdAt": "2025-10-07T12:00:00Z",
+    "updatedAt": "2025-10-16T14:00:00Z"
+  }
+]
