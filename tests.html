@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation Tests - Campus Life Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 32px;
+            background: #F8F9FA;
+        }
+
+        h1 {
+            color: #2C3E50;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            color: #4A90E2;
+            margin: 24px 0 16px;
+        }
+
+        .test-group {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .test-case {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            background: #F8F9FA;
+        }
+
+        .test-info {
+            flex: 1;
+        }
+
+        .test-input {
+            font-family: monospace;
+            font-size: 14px;
+            color: #7F8C8D;
+        }
+
+        .test-result {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .test-result.pass {
+            background: #50C878;
+            color: white;
+        }
+
+        .test-result.fail {
+            background: #E74C3C;
+            color: white;
+        }
+
+        .summary {
+            position: sticky;
+            top: 0;
+            background: #2C3E50;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .summary.all-pass {
+            background: #50C878;
+        }
+
+        code {
+            background: #F0F0F0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Campus Life Planner - Validation Tests</h1>
+
+    <div id="summary" class="summary">Running tests...</div>
+
+    <div id="test-results"></div>
+
+    <script type="module">
+        import { validateTitle, validateDuration, validateDate, validateTag, PATTERNS } from './scripts/validators.js';
+        import { compileRegex, searchTasks } from './scripts/search.js';
+
+        const results = [];
+
+        function test(description, input, validator, expectedValid) {
+            const result = validator(input);
+            const pass = result.valid === expectedValid;
+
+            results.push({
+                description,
+                input,
+                expected: expectedValid ? 'Valid' : 'Invalid',
+                actual: result.valid ? 'Valid' : 'Invalid',
+                pass,
+                message: result.message || ''
+            });
+
+            return pass;
+        }
+
+        function testPattern(description, pattern, input, shouldMatch) {
+            const regex = pattern.regex;
+            const matches = regex.test(input);
+            const pass = matches === shouldMatch;
+
+            results.push({
+                description,
+                input,
+                expected: shouldMatch ? 'Match' : 'No Match',
+                actual: matches ? 'Match' : 'No Match',
+                pass
+            });
+
+            return pass;
+        }
+
+        function runTests() {
+            // Title validation tests
+            test('Valid title: "Study for Midterm"', 'Study for Midterm', validateTitle, true);
+            test('Valid title: "A"', 'A', validateTitle, true);
+            test('Valid title: "Complete Assignment 3"', 'Complete Assignment 3', validateTitle, true);
+            test('Invalid title: leading space', ' Study', validateTitle, false);
+            test('Invalid title: trailing space', 'Study ', validateTitle, false);
+            test('Invalid title: empty string', '', validateTitle, false);
+            test('Invalid title: duplicate words', 'Study Study Session', validateTitle, false);
+            test('Invalid title: double duplicate', 'The the quick brown fox', validateTitle, false);
+
+            // Duration validation tests
+            test('Valid duration: 60', '60', validateDuration, true);
+            test('Valid duration: 120', 120, validateDuration, true);
+            test('Valid duration: 0', '0', validateDuration, true);
+            test('Valid duration: 1440', '1440', validateDuration, true);
+            test('Invalid duration: negative', '-5', validateDuration, false);
+            test('Invalid duration: decimal', '45.5', validateDuration, false);
+            test('Invalid duration: leading zero', '045', validateDuration, false);
+            test('Invalid duration: over limit', '1500', validateDuration, false);
+
+            // Date validation tests
+            test('Valid date: 2025-10-20', '2025-10-20', validateDate, true);
+            test('Valid date: 2025-01-01', '2025-01-01', validateDate, true);
+            test('Valid date: 2025-12-31', '2025-12-31', validateDate, true);
+            test('Invalid date: wrong format', '20-10-2025', validateDate, false);
+            test('Invalid date: month 13', '2025-13-01', validateDate, false);
+            test('Invalid date: day 32', '2025-10-32', validateDate, false);
+            test('Invalid date: missing dash', '20251020', validateDate, false);
+
+            // Tag validation tests
+            test('Valid tag: "Study"', 'Study', validateTag, true);
+            test('Valid tag: "Study-Group"', 'Study-Group', validateTag, true);
+            test('Valid tag: "Mid Term Exam"', 'Mid Term Exam', validateTag, true);
+            test('Invalid tag: numbers', 'Study123', validateTag, false);
+            test('Invalid tag: special chars', 'Study@Home', validateTag, false);
+            test('Invalid tag: leading hyphen', '-Study', validateTag, false);
+            test('Invalid tag: trailing space', 'Study ', validateTag, false);
+
+            // Pattern tests
+            testPattern('Title pattern: valid "Study"', PATTERNS.TITLE, 'Study', true);
+            testPattern('Title pattern: invalid " Study"', PATTERNS.TITLE, ' Study', false);
+            testPattern('Duration pattern: valid "120"', PATTERNS.DURATION, '120', true);
+            testPattern('Duration pattern: invalid "01"', PATTERNS.DURATION, '01', false);
+            testPattern('Date pattern: valid "2025-10-20"', PATTERNS.DATE, '2025-10-20', true);
+            testPattern('Date pattern: invalid "10-20-2025"', PATTERNS.DATE, '10-20-2025', false);
+            testPattern('Tag pattern: valid "Study"', PATTERNS.TAG, 'Study', true);
+            testPattern('Tag pattern: invalid "Study123"', PATTERNS.TAG, 'Study123', false);
+            testPattern('Duplicate words: "the the"', PATTERNS.DUPLICATE_WORDS, 'the the test', true);
+            testPattern('Duplicate words: "no duplicates"', PATTERNS.DUPLICATE_WORDS, 'no duplicates here', false);
+
+            // Regex compilation tests (safe compiler)
+            const validRegex = compileRegex('Study|Exam');
+            results.push({
+                description: 'Compile valid regex: "Study|Exam"',
+                input: 'Study|Exam',
+                expected: 'RegExp object',
+                actual: validRegex ? 'RegExp object' : 'null',
+                pass: validRegex !== null
+            });
+
+            const invalidRegex = compileRegex('[unclosed');
+            results.push({
+                description: 'Compile invalid regex: "[unclosed"',
+                input: '[unclosed',
+                expected: 'null',
+                actual: invalidRegex ? 'RegExp object' : 'null',
+                pass: invalidRegex === null
+            });
+
+            // Search pattern tests
+            const tasks = [
+                { id: '1', title: 'Study for Exam', tag: 'Study', dueDate: '2025-10-20', duration: 120 },
+                { id: '2', title: 'Complete Assignment', tag: 'Assignment', dueDate: '2025-10-21', duration: 90 },
+                { id: '3', title: 'Study Session', tag: 'Study', dueDate: '2025-10-22', duration: 60 }
+            ];
+
+            const searchResult1 = searchTasks(tasks, 'Study');
+            results.push({
+                description: 'Search: "Study" (case-insensitive)',
+                input: 'Study',
+                expected: '2 matches',
+                actual: `${searchResult1.matches.length} matches`,
+                pass: searchResult1.matches.length === 2
+            });
+
+            const searchResult2 = searchTasks(tasks, '@tag:Study');
+            results.push({
+                description: 'Search: "@tag:Study" (special pattern)',
+                input: '@tag:Study',
+                expected: '2 matches',
+                actual: `${searchResult2.matches.length} matches`,
+                pass: searchResult2.matches.length === 2
+            });
+
+            const searchResult3 = searchTasks(tasks, 'Assignment|Exam', false);
+            results.push({
+                description: 'Search: "Assignment|Exam" (OR pattern)',
+                input: 'Assignment|Exam',
+                expected: '2 matches',
+                actual: `${searchResult3.matches.length} matches`,
+                pass: searchResult3.matches.length === 2
+            });
+
+            // Display results
+            displayResults();
+        }
+
+        function displayResults() {
+            const container = document.getElementById('test-results');
+            const summary = document.getElementById('summary');
+
+            const totalTests = results.length;
+            const passedTests = results.filter(r => r.pass).length;
+            const failedTests = totalTests - passedTests;
+
+            summary.innerHTML = `
+                Total: ${totalTests} |
+                Passed: <strong>${passedTests}</strong> |
+                Failed: <strong>${failedTests}</strong>
+            `;
+
+            if (failedTests === 0) {
+                summary.classList.add('all-pass');
+            }
+
+            // Group tests by category
+            const groups = {
+                'Title Validation': results.filter(r => r.description.toLowerCase().includes('title')),
+                'Duration Validation': results.filter(r => r.description.toLowerCase().includes('duration')),
+                'Date Validation': results.filter(r => r.description.toLowerCase().includes('date')),
+                'Tag Validation': results.filter(r => r.description.toLowerCase().includes('tag')),
+                'Pattern Tests': results.filter(r => r.description.includes('pattern')),
+                'Regex Compilation': results.filter(r => r.description.includes('Compile')),
+                'Search Tests': results.filter(r => r.description.includes('Search'))
+            };
+
+            Object.entries(groups).forEach(([groupName, tests]) => {
+                if (tests.length === 0) return;
+
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'test-group';
+                groupDiv.innerHTML = `<h2>${groupName}</h2>`;
+
+                tests.forEach(test => {
+                    const testDiv = document.createElement('div');
+                    testDiv.className = 'test-case';
+                    testDiv.innerHTML = `
+                        <div class="test-info">
+                            <div>${test.description}</div>
+                            <div class="test-input">Input: <code>${escapeHtml(String(test.input))}</code></div>
+                            ${test.message ? `<div style="color: #E74C3C; font-size: 12px; margin-top: 4px;">${test.message}</div>` : ''}
+                        </div>
+                        <div class="test-result ${test.pass ? 'pass' : 'fail'}">
+                            ${test.pass ? '✓ PASS' : '✗ FAIL'}
+                        </div>
+                    `;
+                    groupDiv.appendChild(testDiv);
+                });
+
+                container.appendChild(groupDiv);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Run tests on load
+        runTests();
+    </script>
+</body>
+</html>
